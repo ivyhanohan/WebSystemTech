@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Information</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <center>
+        <h1>PERSONAL INFORMATION</h1>
+        <form id="infoForm">
+            <label for="name">Name: </label>
+            <input type="text" id="name" placeholder="Enter Name"><br><br>
+
+            <label for="age">Age: </label>
+            <input type="number" id="age" placeholder="Enter Age"><br><br>
+
+            <label for="hobbies">Hobbies: </label>
+            <input type="text" id="hobbies" placeholder="Enter Hobbies"><br><br>
+
+            <label for="student">Are you a student:</label><br>
+            <input class="cbox" type="checkbox" id="student"><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <h2>Summary</h2>
+        <div class="container">
+            <p id="summary"></p>
+        </div>
+
+        <script>
+            document.getElementById("infoForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                let name = document.getElementById('name').value.trim();
+                let age = document.getElementById('age').value;
+                let hobbies = document.getElementById('hobbies').value.trim();
+
+                if (!name || !age || !hobbies) {
+                    alert("sudli una usa submit fuck.");
+                    return;
+                }
+
+                let hobbiesArray = hobbies.split(',');
+                let student = document.getElementById('student').checked;
+
+                addSummaryItem(name, age, hobbiesArray, student);
+
+                document.getElementById('name').value = '';
+                document.getElementById('age').value = '';
+                document.getElementById('hobbies').value = '';
+                document.getElementById('student').checked = false;
+            });
+
+            function addSummaryItem(name, age, hobbies, student) {
+                let summaryDiv = document.createElement('div');
+                summaryDiv.innerHTML = `
+                    <p>Name: ${name}<br>Age: ${age}<br>Hobbies: ${hobbies.join(', ')}<br>Student: ${student ? 'Yes' : 'No'}</p>
+                    <button onclick="editItem(this)">Edit</button>
+                    <button onclick="deleteItem(this)">Delete</button>
+                `;
+                document.getElementById('summary').appendChild(summaryDiv);
+            }
+
+            function editItem(button) {
+                let summaryDiv = button.parentElement;
+                let paragraphs = summaryDiv.getElementsByTagName('p')[0].innerText.split('\n');
+                
+                let name = paragraphs[0].split(': ')[1];
+                let age = paragraphs[1].split(': ')[1];
+                let hobbies = paragraphs[2].split(': ')[1].split(', ');
+                let student = paragraphs[3].split(': ')[1] === 'Yes';
+
+                document.getElementById('name').value = name;
+                document.getElementById('age').value = age;
+                document.getElementById('hobbies').value = hobbies.join(', ');
+                document.getElementById('student').checked = student;
+
+                deleteItem(button); 
+            }
+
+            function deleteItem(button) {
+                let summaryDiv = button.parentElement;
+                summaryDiv.remove();
+            }
+        </script>
+    </center>
+</body>
+</html>
